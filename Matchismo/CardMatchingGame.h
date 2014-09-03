@@ -26,7 +26,7 @@
 @property (nonatomic,strong) NSMutableArray *existCard;
 //@property (nonatomic) NSUInteger existCardCount;
 
-- (void) checkStatus: (NSMutableArray *) existCard;
+- (int) checkStatus: (NSMutableArray *) existCard;
 /* ----- my code ------*/
 
 

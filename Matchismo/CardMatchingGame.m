@@ -106,9 +106,13 @@ static const int COST_TO_CHOOSE = 1;
     }*/
 }
 
-- (void) checkStatus: (NSMutableArray *) existCard;
+- (int) checkStatus: (NSMutableArray *) existCard;
 {
-    
+    int i = 0;
+    for (Card* eachCard in existCard) {
+        i++;
+    }
+    return i;
 }
 
 

@@ -14,7 +14,7 @@
 @interface CardGameViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 //@property (nonatomic) int flipCount;
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSMutableArray *cardButtons;
 @property (strong,nonatomic) Deck *deck;
 @property (strong,nonatomic) CardMatchingGame *game;
 
@@ -64,12 +64,16 @@
     {
         [self.game chooseCardAtIndex:cardIndex];
     
-        /* ----- my code ------*/
         self.currentPos++;
-        self.scoreLabel.text = [NSString stringWithFormat:@"cardNum: %d",cardIndex];//some display problem
         
+        //self.scoreLabel.text = [NSString stringWithFormat:@"cardNum: %d",cardIndex];//some display problem
         
-        /* ----- my code ------*/
+        [self.game.existCard addObject:sender];
+
+        
+        int k = [self.game checkStatus:self.game.existCard];
+        
+        self.scoreLabel.text = [NSString stringWithFormat:@"exist: %d",k];
 
         [self updateUI];
         /*
@@ -107,15 +111,25 @@
         
         /* ----- my code ------*/
         
-        //save the current card here
-        [self.game.existCard addObject:card];
-        
+        //[self.game.existCard addObject:card];
+
         
         /* ----- my code ------*/
 
     }
+    //int k = [self.game checkStatus:self.game.existCard];
+    //self.scoreLabel.text = [NSString stringWithFormat:@"exist: %d",k];
+    
     //self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
 }
+
+
+
+
+
+
+
+
 
 - (NSString *)titleForCard:(Card *)card
 {
