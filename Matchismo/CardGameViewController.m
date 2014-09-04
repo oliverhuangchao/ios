@@ -49,6 +49,7 @@
 {
     return [[PlayingCardDeck alloc] init];
 }
+
 /*
 - (void) setFlipCount:(int)flipCount{
     _flipCount = flipCount;
@@ -71,8 +72,6 @@
 
         int samepos = [self.game checkStatus:self.game.existCard];//check same position
 
-        //if (samepos != -1)  [NSThread sleepForTimeInterval:0.5];
-        //[self updateUI:self.currentPos];//draw the screen of the game
         
         self.scoreLabel.text = [NSString stringWithFormat:@"existnumber: %d, sameposition: %d",self.game.existCard.count,samepos];
 
@@ -98,9 +97,12 @@
         }
         
         [self updateUI:self.currentPos];//draw the screen of the game
-        //self.scoreLabel.text = [NSString stringWithFormat:@"existnumber: %d, currentpos: %d",self.game.existCard.count,self.currentPos];
-        self.scoreLabel.text = [NSString stringWithFormat:@"Exist Card: %d",self.game.existCard.count];
-
+        if (self.game.existCard.count == 0) {
+            self.scoreLabel.text = [NSString stringWithFormat:@"You win!"];
+        }
+        else{
+            self.scoreLabel.text = [NSString stringWithFormat:@"Exist Card: %d",self.currentPos];
+        }
         /*
          if ([sender.currentTitle length]){
             UIImage *cardImage = [UIImage imageNamed:@"cardback"];
@@ -126,7 +128,6 @@
         int buttonIndex = [self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:buttonIndex];
         
-        
         if (buttonIndex<currentPos) {
             card.Chosen = YES;
         }
@@ -139,7 +140,6 @@
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState: UIControlStateNormal];
         
         //cardButton.enabled = !card.isMatched;//set whether the card should be put as ismatched
-
     }
 }
 

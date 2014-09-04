@@ -44,7 +44,6 @@ static const int COST_TO_CHOOSE = 1;
             Card *card = [deck drawRandCard];
             if (card) {
                 [self.cards addObject:card];
-                //[self.existCard addObject:card];
             }
             else {
                 self = nil;
@@ -60,21 +59,11 @@ static const int COST_TO_CHOOSE = 1;
 - (Card *) cardAtIndex: (NSUInteger) index
 {
     return (index < [self.cards count])? self.cards[index]: nil;
-    //return (index < [self.existCard count])? self.existCard[index]: nil;
 }
 
 - (void) chooseCardAtIndex: (NSUInteger) index
 {
-    
     Card *card =[self cardAtIndex:index];
-    /* ----- my code ------*/
-    
-    //card.chosen = YES;
-    //card.matched = YES;
-
-   
-    /* ----- my code ------*/
-    
     /*
     if (!card.isMatched)
     {
@@ -114,7 +103,6 @@ static const int COST_TO_CHOOSE = 1;
     int samepos = -1;
     Card* lastCard = [existCard objectAtIndex:[existCard count]-1];
    
-    //for (Card* eachCard in existCard)
     for (int i = 0;i<[existCard count]-1;i++)
     {
         Card *eachCard = [existCard objectAtIndex:i];
