@@ -10,14 +10,15 @@
 
 @interface CardMatchingGame()
 @property (nonatomic,readwrite) NSInteger score;
-@property (nonatomic,strong) NSMutableArray *cards;
+//@property (nonatomic,strong) NSMutableArray *cards;
 @end
 
 @implementation CardMatchingGame
-
+/*
 static const int MISMATCH_PENALTY = 2;
 static const int MATCH_BONUS = 4;
 static const int COST_TO_CHOOSE = 1;
+ */
 - (NSMutableArray *) cards
 {
     if (!_cards) {
@@ -43,6 +44,7 @@ static const int COST_TO_CHOOSE = 1;
             Card *card = [deck drawRandCard];
             if (card) {
                 [self.cards addObject:card];
+                //[self.existCard addObject:card];
             }
             else {
                 self = nil;
@@ -58,6 +60,7 @@ static const int COST_TO_CHOOSE = 1;
 - (Card *) cardAtIndex: (NSUInteger) index
 {
     return (index < [self.cards count])? self.cards[index]: nil;
+    //return (index < [self.existCard count])? self.existCard[index]: nil;
 }
 
 - (void) chooseCardAtIndex: (NSUInteger) index
@@ -66,8 +69,8 @@ static const int COST_TO_CHOOSE = 1;
     Card *card =[self cardAtIndex:index];
     /* ----- my code ------*/
     
-    card.chosen = YES;
-    card.matched = YES;
+    //card.chosen = YES;
+    //card.matched = YES;
 
    
     /* ----- my code ------*/
@@ -106,26 +109,23 @@ static const int COST_TO_CHOOSE = 1;
     }*/
 }
 
-- (int) checkStatus: (NSMutableArray *) existCard;
+- (int) checkStatus: (NSMutableArray *) existCard;// see if two cards are same,return the first card's position
 {
-    int i = 0;
-    for (Card* eachCard in existCard) {
-        i++;
+    int samepos = -1;
+    Card* lastCard = [existCard objectAtIndex:[existCard count]-1];
+   
+    //for (Card* eachCard in existCard)
+    for (int i = 0;i<[existCard count]-1;i++)
+    {
+        Card *eachCard = [existCard objectAtIndex:i];
+        if ([eachCard.value isEqualToString:lastCard.value])
+        {
+            NSLog(@"nice");
+            samepos = i;
+            break;
+        }
     }
-    return i;
+    return samepos;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @end

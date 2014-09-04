@@ -21,6 +21,7 @@
 /* --- mycode --- */
 
 @property (nonatomic) NSUInteger currentPos;
+//@property (nonatomic) NSUInteger samepos;
 
 /* --- mycode --- */
 
@@ -63,19 +64,46 @@
     if (cardIndex == self.currentPos)
     {
         [self.game chooseCardAtIndex:cardIndex];
-    
-        self.currentPos++;
         
-        //self.scoreLabel.text = [NSString stringWithFormat:@"cardNum: %d",cardIndex];//some display problem
-        
-        [self.game.existCard addObject:sender];
+        Card *newcard = [self.game cardAtIndex:cardIndex]; //game class has already random the card, so do not use [self.deck drawRandCard];
+             
+        [self.game.existCard addObject:newcard];
 
-        
-        int k = [self.game checkStatus:self.game.existCard];
-        
-        self.scoreLabel.text = [NSString stringWithFormat:@"exist: %d",k];
+        int samepos = [self.game checkStatus:self.game.existCard];//check same position
 
-        [self updateUI];
+        //if (samepos != -1)  [NSThread sleepForTimeInterval:0.5];
+        //[self updateUI:self.currentPos];//draw the screen of the game
+        
+        self.scoreLabel.text = [NSString stringWithFormat:@"samepos: %d, currentpos: %d",self.game.existCard.count,samepos];
+
+
+        if (samepos == -1)
+        {
+            self.currentPos++;
+            //[self updateUI:self.currentPos];
+        }
+        else
+        {
+            //[self updateUI:self.currentPos];
+            //[NSThread sleepForTimeInterval:1.0];
+
+            //[self updateUI:self.currentPos];
+            self.currentPos = samepos;
+            int init_exist_Count = self.game.existCard.count;
+            
+
+            
+            
+            for(int i = samepos;i < init_exist_Count-2;i++)
+            {
+                Card * randCard = [self.deck drawRandCard];
+                [self.game.existCard removeObjectAtIndex:i];
+                [self.game.cards replaceObjectAtIndex:i withObject:randCard];
+
+            }
+        }
+        
+        [self updateUI:self.currentPos];//draw the screen of the game
         /*
          if ([sender.currentTitle length]){
             UIImage *cardImage = [UIImage imageNamed:@"cardback"];
@@ -90,42 +118,37 @@
                 [sender setTitle:randomCard.contents forState:UIControlStateNormal];
             }
          }
-         self.flipCount++;
          */
     }
 }
 
-- (void) updateUI
+- (void) updateUI:(NSUInteger) currentPos
 {
+    int tmp_index = 0;
     for (UIButton *cardButton in self.cardButtons)
     {
-        int cardIndex = [self.cardButtons indexOfObject:cardButton];
-        Card *card = [self.game cardAtIndex:cardIndex];
+        int buttonIndex = [self.cardButtons indexOfObject:cardButton];
+        Card *card = [self.game cardAtIndex:buttonIndex];
         
-        // set the content of the select card
-        [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
+        
+        if (tmp_index<currentPos) {
+            card.Chosen = YES;
+            //card.Matched = YES;
+        }
+        else
+        {
+            card.Chosen = NO;
+            //card.Matched = YES;
+        }
+        
+        
+        [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];//set whether the card should be put as ismatched
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState: UIControlStateNormal];
         
-        //set whether the card should be put as ismatched
-        cardButton.enabled = !card.isMatched;
-        
-        /* ----- my code ------*/
-        
-        //[self.game.existCard addObject:card];
-
-        
-        /* ----- my code ------*/
-
+        //cardButton.enabled = !card.isMatched;//set whether the card should be put as ismatched
+        tmp_index++;
     }
-    //int k = [self.game checkStatus:self.game.existCard];
-    //self.scoreLabel.text = [NSString stringWithFormat:@"exist: %d",k];
-    
-    //self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
 }
-
-
-
-
 
 
 

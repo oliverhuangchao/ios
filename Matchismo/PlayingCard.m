@@ -32,7 +32,17 @@
 {
     NSArray *rankString = [PlayingCard rankStrings];
     return [rankString[self.rank] stringByAppendingString:self.suit];
+
 }
+
+-(NSString *) value
+{
+    NSArray *rankString = [PlayingCard rankStrings];
+    NSString *result = [rankString objectAtIndex:self.rank];
+    return result;
+
+}
+
 @synthesize suit = _suit;
 
 + (NSArray *) validSuits
@@ -42,7 +52,7 @@
 
 - (void) setSuit:(NSString *)suit
 {
-    if ([@[@"♥",@"♦",@"♠",@"♣"] containsObject:suit])
+    if ([@[@"♥",@"♦",@"♠",@"♣"] containsObject:suit])//
     {
         _suit = suit;
     }
