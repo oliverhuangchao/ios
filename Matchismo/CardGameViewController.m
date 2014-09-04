@@ -74,36 +74,33 @@
         //if (samepos != -1)  [NSThread sleepForTimeInterval:0.5];
         //[self updateUI:self.currentPos];//draw the screen of the game
         
-        self.scoreLabel.text = [NSString stringWithFormat:@"samepos: %d, currentpos: %d",self.game.existCard.count,samepos];
-
+        self.scoreLabel.text = [NSString stringWithFormat:@"existnumber: %d, sameposition: %d",self.game.existCard.count,samepos];
 
         if (samepos == -1)
         {
             self.currentPos++;
-            //[self updateUI:self.currentPos];
         }
         else
         {
-            //[self updateUI:self.currentPos];
             //[NSThread sleepForTimeInterval:1.0];
 
-            //[self updateUI:self.currentPos];
             self.currentPos = samepos;
+            
             int init_exist_Count = self.game.existCard.count;
             
-
-            
-            
-            for(int i = samepos;i < init_exist_Count-2;i++)
+            for(int i = init_exist_Count-1;i >= samepos; i--)
             {
-                Card * randCard = [self.deck drawRandCard];
                 [self.game.existCard removeObjectAtIndex:i];
+                Card * randCard = [self.deck drawRandCard];
                 [self.game.cards replaceObjectAtIndex:i withObject:randCard];
 
             }
         }
         
         [self updateUI:self.currentPos];//draw the screen of the game
+        //self.scoreLabel.text = [NSString stringWithFormat:@"existnumber: %d, currentpos: %d",self.game.existCard.count,self.currentPos];
+        self.scoreLabel.text = [NSString stringWithFormat:@"Exist Card: %d",self.game.existCard.count];
+
         /*
          if ([sender.currentTitle length]){
             UIImage *cardImage = [UIImage imageNamed:@"cardback"];
@@ -124,29 +121,25 @@
 
 - (void) updateUI:(NSUInteger) currentPos
 {
-    int tmp_index = 0;
     for (UIButton *cardButton in self.cardButtons)
     {
         int buttonIndex = [self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:buttonIndex];
         
         
-        if (tmp_index<currentPos) {
+        if (buttonIndex<currentPos) {
             card.Chosen = YES;
-            //card.Matched = YES;
         }
         else
         {
             card.Chosen = NO;
-            //card.Matched = YES;
         }
-        
         
         [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];//set whether the card should be put as ismatched
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState: UIControlStateNormal];
         
         //cardButton.enabled = !card.isMatched;//set whether the card should be put as ismatched
-        tmp_index++;
+
     }
 }
 
