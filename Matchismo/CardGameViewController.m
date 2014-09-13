@@ -17,23 +17,47 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSMutableArray *cardButtons;
 @property (strong,nonatomic) Deck *deck;
 @property (strong,nonatomic) CardMatchingGame *game;
-@property (weak, nonatomic) IBOutlet UITextView *CardCount;
+@property (weak, nonatomic) IBOutlet UITextField *CardCountTextField;
+//@property (weak, nonatomic) IBOutlet UITextView *CardCount;
 @property (weak, nonatomic) IBOutlet UILabel *IntroductionLabel;
-
-
 
 @property (nonatomic) NSUInteger currentPos;
 @property (nonatomic) NSUInteger stepCount;
 @property (nonatomic) NSUInteger CardCountNumber;
 
-
 @end
 
 @implementation CardGameViewController
-
-- (void) viewDidLoad
+- (IBAction)ChangeCardCount:(UITextField *)sender
 {
-    self.CardCountNumber = 9;
+    self.CardCountNumber = [self.CardCountTextField.text intValue] - 1;
+    self.IntroductionLabel.text = [NSString stringWithFormat:@"You have selected %d cards",self.CardCountNumber+1];
+}
+- (IBAction)LeaveTheCardCountTextField:(UITextField *)sender
+{
+    self.IntroductionLabel.text = [NSString stringWithFormat:@"You have selected %d cards",self.CardCountNumber+1];
+}
+- (IBAction)RestartGame:(UIButton *)sender//restart the game!!!
+{
+    for (UIButton *cardButton in self.cardButtons)
+    {
+        int buttonIndex = [self.cardButtons indexOfObject:cardButton];
+        Card *card = [self.game cardAtIndex:buttonIndex];
+        card.Chosen = NO;
+        card.matched = NO;
+        [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
+        [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState: UIControlStateNormal];
+        cardButton.enabled = !card.isMatched;
+    }
+    self.currentPos = 0;
+    self.stepCount = 0;
+    self.CardCountNumber = [self.CardCountTextField.text intValue]-1;
+    self.IntroductionLabel.text = [NSString stringWithFormat:@"You have selected %d cards",self.CardCountNumber+1];
+}
+
+- (void) viewDidLoad //initializtion methods
+{
+    self.CardCountNumber = 14;
 }
 
 
@@ -57,10 +81,6 @@
     return [[PlayingCardDeck alloc] init];
 }
 
-- (IBAction)SetCardCount:(UIButton *)sender {
-    self.CardCountNumber = [self.CardCount.text intValue] - 1;
-    self.IntroductionLabel.text = [NSString stringWithFormat:@"You have selected %d cards in this game",self.CardCountNumber+1];
-}
 
 - (IBAction)touchCardButton:(UIButton *)sender
 {
@@ -124,7 +144,7 @@
     {
         int buttonIndex = [self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:buttonIndex];
-        if (buttonIndex<self.currentPos)
+        if (buttonIndex<self.currentPos )
             card.Chosen = YES;
         else
             card.Chosen = NO;
@@ -133,7 +153,6 @@
             card.matched = YES;
         else
             card.matched = NO;
-        
         [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState: UIControlStateNormal];
         cardButton.enabled = !card.isMatched;
@@ -147,7 +166,10 @@
 
 - (UIImage *)backgroundImageForCard:(Card *)card
 {
-    return [UIImage imageNamed:card.isChosen? @"cardfront" : @"cardback"];
+    if(!card.isMatched)
+        return [UIImage imageNamed:card.isChosen? @"cardfront" : @"cardback"];
+    else
+        return [UIImage imageNamed:card.isChosen? @"cardfront" : @"monkey"];
 }
 
 
